@@ -386,7 +386,7 @@ Also, we could have an indicator of a property, call it .p.
 And, we can set 		`obj.p(ride_along_value) = 2`
 Or,	 we can get 		`a = obj.p(ride_along_value)`
 
-And, in with the .p operator, the '_' of the member is understood.
+And, with the .p operator, the '_' of the member is understood.
 
 And, we could expect that a variable value could be used with .p.
 
