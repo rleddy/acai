@@ -224,7 +224,8 @@ In this language each key word can start with a dot '.'. Each key word has to be
 Let's choose '{' for a start of block. And, '}' for an end of block. That's common in many languages.
 
 So, here are som examples:
-```JavaScript
+```
+
 .if( <expr> )
 .elseif ( <expr> )
 
