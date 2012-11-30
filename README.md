@@ -131,7 +131,7 @@ Meta, Meta
 =============================================================================================================
 
 One way to leave out a piece of a program and show that something goes in a section of it is to put it in a tag:
-<something goes here>
+`<something goes here>`
 
 (Text version of this doc) Look for === to separate big section.
 Look for --- to separate little subsections.
@@ -291,9 +291,6 @@ So, now this collection of statements could have white spaces removed, and still
 			.default {
 			}
 		}
-	}
-}
-
 	}
 } .else {
 	.exit(1)
