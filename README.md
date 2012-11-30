@@ -1,11 +1,11 @@
 
-
 Acai
 
   	A healthy fruit.
 
 				So, here is a computer programming language named after it.
 
+(OK -- there is this mark up langauge to be used here -- will address that after a little bit.)
 
 Intro 
 =============================================================================================================
