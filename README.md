@@ -323,11 +323,11 @@ Well, it would be nice to make it like that, but not go that far all the time.
 So, if the variable is an object, then you can get a lambda application kind of feel to the conditional.
 If the variable is more literal, then the expression might act more like a lambda with the variable as the first parameter.
 
-We can represent 'this' with a symbol '*'
+We can represent 'this' with a symbol '@'
 
 We might write the following:
 
-`	a_var.if ( * == 2 ) { * + 5 }`
+`	a_var.if ( @ == 2 ) { @ + 5 }`
 
 This is an expression that yields 7.
 
@@ -340,12 +340,12 @@ This is an expression that yields 7.
 So, for an object, we would expect a complete functionality of membership from such a construct.
 
 ```
-my_array.foreach( *._list_of_things .as q ) {
+my_array.foreach( @._list_of_things .as q ) {
 	output << q
 }
 ```
 
-( The * might be taken implicitly:
+( The @ might be taken implicitly:
 
 ```
 	my_array.foreach( ._list_of_things .as q ) {
@@ -353,7 +353,7 @@ my_array.foreach( *._list_of_things .as q ) {
 	}
 ```
 
-  You can see that the implicit use of * still has meaning when, ._ indicates the member variable.
+  You can see that the implicit use of @ still has meaning when, ._ indicates the member variable.
 
 )
 
@@ -493,7 +493,7 @@ We can have other key words for visibility.
 
 
 
-/// what about obj.new(Other_cool_thing) ???
+/// what about `obj.new(Other_cool_thing)` ???
 =============================================================================================================
 
 
@@ -519,6 +519,71 @@ Later, I will look at some nice syntax for reading from lists.
 // array
 
 ar = [ 1, 2, 3, 4, 5 ] // default way of constructing...
+
+matrix = [ 1, 2, 3; 4, 5, 6; 7, 8, 9]  // borrow from certain numerical languages
+```
+
+Now, let's get as close as we can to set theoretic syntax.
+We describe a set by writing it's description inside braces `{}`
+
+Often the we would write the description by listing a form of elements followed by a Sheff stroke, 
+followed by a set of constraints on the values.
+
+For example, `{ x | limit(x) }`
+
+Using this idea and borrowing from Python, we can decide to have the set syntax mean those elements as a data object
+collection. So, the set syntax can be used to indicate what will be the elements along with a formula for generating
+the elements so indicated.
+
+Here is a an example `{ x | formula_for_generating(x) }`
+
+The formula might produce duplicates. But, we can agree that if a set syntax is used, that there can't be duplicates.
+So, `{ x | formula_for_generating(x) }` specifies that when the set is generated, that the duplicates be removed.
+
+It seems like a good idea, to make this an expression of elements being generated. So, we are merely saying that the
+elements are generated with a need to have them be stored somewhere. And, we'll express that later. But, 
+here is another form of generation.
+
+As an extension of set generation, we can imagine similar syntax for arrays.
+
+Here is aa generator of elements with possible duplicates: `[ x | formula_for_generating(x) ]`
+
+Now, let's get specific about how we want to store the generated data.
+
+Data can be stored as a set `{}`, as an array `[]`, as a list `()`.
+
+So, here is a set storage of data without duplicates: `{{ x | formula_for_generating(x) }}`
+And, here is a an array storage of data without duplicates: `[{ x | formula_for_generating(x) }]`
+And, here is a a list storage of data with possible duplicates: `([ x | formula_for_generating(x) ])`
+
+We can extend this kind of syntactic idea to hash tables `{# #}`
+
+And, we can make elements be more than single object, but also pairs, tripples, etc.
+
+	`{{ (x,y) | formula_for_generating(x,y) }}`
+
+And, we can mangle the syntax for a pair `(x,y)` in order to specify a map: `( x => y )`
+So, here is a map specification:
+
+	`{{ (x => y) | formula_for_generating(x,y) }}`
+
+So, the examples that follow show some more information about specifying data, and keeping clean separations between parts.
+
+So, here is a special symbol, `|>` . That symbol, `|>` , is meant to keep separate generators for parts of tupples. 
+If no variables are mentioned, but single values are produced by expressions delimited by `|>`, 
+then they can be assumed to line up with the tupple elements or one `|>` for each `,`.
+
+If an expression between `|>`'s generates a pair or higher order tupple, then the tupple elements will line up with  
+the first position the `|>` begins with. And, the next expression following a `|>` will start start after 
+the length of the tupple.
+
+So, (x,y,z,t,r,s) | gen(x) `|>` gen(a,b)`|>` gen(z) `|>` gen(t,r,s) yields pairs in the family (x,a,b,z,t,r,s)
+
+For stepping along a mesh, ` ^!` is used in place of a delta symbol.
+
+Here are some more examples:
+
+```
 
 // Tripples  :: with explicit types, and with variable bindings
 
@@ -606,7 +671,7 @@ mM = [[ (x:double) | x = f(t,*,*) .to(N) .to(M) ]]   /// t is an external parame
 // Make a tensor
 
 
-t_3 = [[ (x:double) | x = f(t,*,*,*) .to(N) .to(M) .to(O) ]]   /// t is an external parameter such as time...
+t_3 = [[ (x:double) | x = f(t,*,*,*) .to(M) .to(N) .to(O) ]]   /// t is an external parameter such as time...
 
 t_n = [[ (x:double) | x = f(t,...) .to(o) .by(n) ]]   /// t is an external parameter such as time...
 
