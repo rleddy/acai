@@ -257,13 +257,13 @@ So, here are som examples:
 
 .cases(<expr>) {
 	.case(<expr1>) {
-		break;
+		.break;
 	}
 	.case(<expr2>) {
-		break;
+		.break;
 	}
 	.case(<expr3>) {
-		break;
+		.break;
 	}
 	.default {
 	}
@@ -280,13 +280,13 @@ So, now this collection of statements could have white spaces removed, and still
 	.for (<exprs> ){
 		.cases(<expr>) {
 			.case (<expr1>) {
-				break;
+				.break;
 			}
 			.case (<expr2>) {
-				break;
+				.break;
 			}
 			.case (<expr3>) {
-				break;
+				.break;
 			}
 			.default {
 			}
@@ -645,24 +645,25 @@ hh = {# ( * ) | {Names} |>  .from({Streets} |\ random(#{Streets})) #}  // defaul
 
 
 // Pairs and singletons ... sort requirements  :: with explicit types, and with variable bindings
+// note that the sort requirement is specified between % signs.
 
 /// return a set -> no duplicates -- default sort
-x = {{ (x:int:<* <= *>,y:double:<* > *>) | x .in([1..4]) |> y .in([0.0,1.0]) ^! 0.5  }}
+x = {{ (x:int:%- <= -%,y:double:%- > -%) | x .in([1..4]) |> y .in([0.0,1.0]) ^! 0.5  }}
 
-x = {{ (x:<* <= *>) | x .in([1..4]) }}
+x = {{ (x:%- <= -%) | x .in([1..4]) }}
 
 
 /// return an array -> no duplicates
-y = [{ (x:int:<* >= *>)| x .in([1..4]) }]
+y = [{ (x:int:%- >= -%)| x .in([1..4]) }]
 
 /// return an array -> no restrictions on generation
-z = [[ (x:<* >= *>) | x .in([1..4]) ]]
+z = [[ (x:%- >= -%) | x .in([1..4]) ]]
 
-/// return a list -> no restrictions on generation
-l = ([ (x:R{N}:<* (.) *>) | x .in(`{vectors()}  ])    /// vectors producing elements in R{N}
+/// return a list -> no restrictions on generation  -> order by vector dot product, *
+l = ([ (x:R{N}:%- * -%) | x .in(`{vectors()}  ])    /// vectors producing elements in R{N}
 
-/// return a list -> no duplicates  -- but, it doen't really need to check for them. And, this is a reverse list.
-l = ({ (x:<* >= *>) | x .in([1..100]) })
+/// return a list -> no duplicates  -- but, it doesn't really need to check for them. And, this is a reverse list.
+l = ({ (x:%- >= -%) | x .in([1..100]) })
 
 
 
