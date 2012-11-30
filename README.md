@@ -1,11 +1,8 @@
-
 Acai
 
   	A healthy fruit.
 
 				So, here is a computer programming language named after it.
-
-(OK -- there is this mark up langauge to be used here -- will address that after a little bit.)
 
 Intro 
 =============================================================================================================
@@ -145,20 +142,20 @@ Some Goals for this Language  (acai)
 
 Here are some goals of this languages:
 
-1) FAST - Be able to write swift compiled programs with easy memory management choices.
-2) Translate TO - Translation to other programs is fine, perhaps it can compile to C++11 and Fortran.
-3) Translate FROM - It would be nice to translate to the language easily enough, e.g. Java to the language.
-4) Knowledge Representation - It would be nice to express knowldege in it, for it's use. For example, OWL primitives might be included.
-5) Mathematics - It should allow better than average mathematical expression.
-6) Vector Math - It should embrace 3D and higher order expression as part of the language.
-7) Type - It should infer type and allow type clarity and at times, in certain identified sections, dispense with it.
-8) Interpreter - There should be an interpreter. It should all the compiled based to be attached with interpretation to follow for experimentation.
-9) Real Time - Real time should be part of its understanding.
-10) Patterns - There should be a framework for pattern matching, which allows a for differnt kinds of matching (RegExp, Satistical, Type, Algorithmic, Time Sensitive)
-11) Unit Tests - Compiling the code should allow for partial unit tests to be generated as a biproduct.
-12) Machine awareness - It should make use of optimization libraries transparently as possible.
-13) Memory - try to keep from using too much. Keep it under tight control, make garbage collection options obvious.
-14) Get something working - it should accomplish all of the above at some point in time, but get started. 
+1. FAST - Be able to write swift compiled programs with easy memory management choices.
+2. Translate TO - Translation to other programs is fine, perhaps it can compile to C++11 and Fortran.
+3. Translate FROM - It would be nice to translate to the language easily enough, e.g. Java to the language.
+4. Knowledge Representation - It would be nice to express knowldege in it, for it's use. For example, OWL primitives might be included.
+5. Mathematics - It should allow better than average mathematical expression.
+6. Vector Math - It should embrace 3D and higher order expression as part of the language.
+7. Type - It should infer type and allow type clarity and at times, in certain identified sections, dispense with it.
+8. Interpreter - There should be an interpreter. It should all the compiled based to be attached with interpretation to follow for experimentation.
+9. Real Time - Real time should be part of its understanding.
+10. Patterns - There should be a framework for pattern matching, which allows a for differnt kinds of matching (RegExp, Satistical, Type, Algorithmic, Time Sensitive)
+11. Unit Tests - Compiling the code should allow for partial unit tests to be generated as a biproduct.
+12. Machine awareness - It should make use of optimization libraries transparently as possible.
+13. Memory - try to keep from using too much. Keep it under tight control, make garbage collection options obvious.
+14. Get something working - it should accomplish all of the above at some point in time, but get started. 
 
 
 
@@ -185,6 +182,7 @@ A variable which starts with u followed by four digits or has _u before four dig
 
 Here are some examples:
 
+```
 	this_is_a_variable
 	_this_is_a_class_member_variable
 
@@ -196,7 +194,7 @@ Here are some examples:
 
 
 	(Double aNumber)
-
+```
 
 Variables can be followed by a dot '.'.
 
@@ -226,7 +224,7 @@ In this language each key word can start with a dot '.'. Each key word has to be
 Let's choose '{' for a start of block. And, '}' for an end of block. That's common in many languages.
 
 So, here are som examples:
-
+```JavaScript
 .if( <expr> )
 .elseif ( <expr> )
 
@@ -269,12 +267,12 @@ So, here are som examples:
 	.default {
 	}
 }
-
+```
 
 
 So, now this collection of statements could have white spaces removed, and still make sense, perhaps.
 
-
+```
 .if(<expr>){
 	<expressions>
 } .else if(<expr>) {
@@ -299,14 +297,14 @@ So, now this collection of statements could have white spaces removed, and still
 } .else {
 	.exit(1)
 }
-
+```
 
 White spaces removed:
-
+```
 .if(<expr>){<expressions>}.elseif(<expr>){.for(<exprs>){.cases(<expr>){.case(<expr1>){.break}.case(<expr2>){.break}.case(<expr3>){.break}.default{.break}}}}}.else {.exit(1)}
+```
 
-Well, you might be able to read it. But, it will be nice to compile.
-If the program eliminates white space, it can be assumed that it will not eliminate them from string literals.
+Well, you might be able to read it. But, it will be nice to compile. If the program eliminates white space, it can be assumed that it will not eliminate them from string literals.
 
 
 
@@ -318,7 +316,7 @@ So, here is one idea having to do with puting a '.' in front of key words.
 
 If I write a variable followed by a key word, I will see something like the following:
 
-	a_var.if(<expr>) { <exprs> }
+`	a_var.if(<expr>) { <exprs> }`
 
 This has a kind of Ruby-esk feel to it. As if any var could be an object.
 
@@ -331,28 +329,31 @@ We can represent 'this' with a symbol '*'
 
 We might write the following:
 
-	a_var.if ( * == 2 ) { * + 5 }
+`	a_var.if ( * == 2 ) { * + 5 }`
 
 This is an expression that yields 7.
 
-( The * might be taken implicitly: 7 == a_var.if ( == 2 ) { + 5 } )
+( The * might be taken implicitly: `7 == a_var.if ( == 2 ) { + 5 }` )
 
 
-( What about a = a_var.?(==2)? b : c  T=> { a = ( a_var == 2 ) ? b : c } )
+( What about `a = a_var.?(==2)? b : c  T=> { a = ( a_var == 2 ) ? b : c }` )
 
 
 So, for an object, we would expect a complete functionality of membership from such a construct.
 
+```
 my_array.foreach( *._list_of_things .as q ) {
 	output << q
 }
+```
 
 ( The * might be taken implicitly:
 
+```
 	my_array.foreach( ._list_of_things .as q ) {
 		output << q
 	}
-
+```
 
   You can see that the implicit use of * still has meaning when, ._ indicates the member variable.
 
@@ -368,31 +369,30 @@ So, we get that there can be objects and objects can have properties.
 
 Say, we have an expression that yields up an object of some type, constructing it, in fact.
 
-	obj = .new(Cool_thing)
+`	obj = .new(Cool_thing)`
 
 Or, perhaps
 
-	obj = .new(Cool_thing,1,3.5,"test case") { <if this is here, it is treated as a lambda passed as the last parameters> }
+`	obj = .new(Cool_thing,1,3.5,"test case") { <if this is here, it is treated as a lambda passed as the last parameters> }`
 
 
 We can write the following to access a member of it.
 
-obj._a_ride_along_value
+`	obj._a_ride_along_value`
 
 
 Also, we could have an indicator of a property, call it .p.
 
+`	obj.p(ride_along_value)`
 
-obj.p(ride_along_value)
-
-And, we can set 		obj.p(ride_along_value) = 2
-Or,	 we can get 		a = obj.p(ride_along_value)
+And, we can set 		`obj.p(ride_along_value) = 2`
+Or,	 we can get 		`a = obj.p(ride_along_value)`
 
 And, in with the .p operator, the '_' of the member is understood.
 
 And, we could expect that a variable value could be used with .p.
 
-obj.p("ride_along_value")
+`	obj.p("ride_along_value")`
 
 We might expect that every property of an object would have a default enumerated index.
 
@@ -405,7 +405,7 @@ But, we might want to override the behavior of those methods.
 
 We can do this in a class definition.  And, let's use .class as our class definition key word.
 
-
+```
 .class(Cool_thing){
 
 	Int .p(ride_along_value)
@@ -421,7 +421,7 @@ We can do this in a class definition.  And, let's use .class as our class defini
 	String .p(my_published_name)    /// uses defaults for String type.
 
 }
-
+```
 
 So, the .p operator has the quality of setting the visibility of a property to public.
 
@@ -429,7 +429,7 @@ So, the .p operator has the quality of setting the visibility of a property to p
 But, .p does not have to be used for internal properties.
 One can have the following:
 
-
+```
 .class(Cool_thing){
 
 	Int .p(ride_along_value)
@@ -450,11 +450,11 @@ One can have the following:
 	String .p(my_published_name)    /// uses defaults for String type.
 
 }
-
+```
 
 We can have other key words for visibility.
 
-
+```
 .class(Cool_thing) .from(Other_classic_type,And_this_also) {
 
 	.new (<args>) {   // default public virtual
@@ -489,10 +489,7 @@ We can have other key words for visibility.
 
 
 }
-
-
-
-
+```
 
 
 
@@ -514,7 +511,7 @@ Later, I will look at some nice syntax for reading from lists.
 (Adding much text later, perhaps today 11/29/2012)
 
 
-
+```
 // This is a comment
 
 /*
@@ -617,5 +614,5 @@ t_n = [[ (x:double) | x = f(t,...) .to(o) .by(n) ]]   /// t is an external param
 
 // Make a decision tree ...
 // A recursive pattern...
-
+```
 
