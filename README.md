@@ -493,7 +493,9 @@ We can have other key words for visibility.
 
 
 
-/// what about `obj.new(Other_cool_thing)` ???
+// what about `obj.new(Other_cool_thing)` ???
+
+Another section
 =============================================================================================================
 
 
@@ -577,7 +579,7 @@ If an expression between `|>`'s generates a pair or higher order tupple, then th
 the first position the `|>` begins with. And, the next expression following a `|>` will start start after 
 the length of the tupple.
 
-So, (x,y,z,t,r,s) | gen(x) `|>` gen(a,b)`|>` gen(z) `|>` gen(t,r,s) yields pairs in the family (x,a,b,z,t,r,s)
+So, (x,y,z,t,r,s) | gen(x) `|>` gen(a,b)`|>` gen(z) `|>` gen(t,r,s) yields tupples in the family (x,a,b,z,t,r,s)
 
 For stepping along a mesh, ` ^!` is used in place of a delta symbol.
 
