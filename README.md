@@ -86,9 +86,9 @@ And, now with processor changes, languages are accomodating many new areas with 
 
 Some of the packages that have to be looked at are the following:
 
-OpenCL		-- Language library for working with a collection of different processors.
-OpenMP		-- A library standard for multi-core programming..
-TBB			-- A multi-core threading library
+1. OpenCL		-- Language library for working with a collection of different processors.
+2. OpenMP		-- A library standard for multi-core programming..
+3. TBB			-- A multi-core threading library
 
 
 An interesting thing about these packages that they have tradeoffs in what they can optimize.
@@ -188,7 +188,7 @@ Here are some examples:
 
 	this_is_variable_2
 
-	nice_for_utf8_u4087 /// a variable with utf8 for Russian (what) at the end.
+	nice_for_utf8_u0416 /// a variable with utf8 for Russian (&0416) at the end.
 
 	aNumber
 
@@ -501,7 +501,7 @@ Another section
 
 
 
-List Comphrension
+List Comprehension
 =============================================================================================================
 
 I am going to lay out some expamples of possible syntax for list generation.
