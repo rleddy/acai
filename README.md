@@ -567,7 +567,9 @@ And, we can make elements be more than single object, but also pairs, tripples, 
 And, we can mangle the syntax for a pair `(x,y)` in order to specify a map: `( x => y )`
 So, here is a map specification:
 
-	`{{ (x => y) | formula_for_generating(x,y) }}`
+```
+	{{ (x => y) | formula_for_generating(x,y) }}
+```
 
 So, the examples that follow show some more information about specifying data, and keeping clean separations between parts.
 
@@ -677,6 +679,65 @@ mM = [[ (x:double) | x = f(t,*,*) .to(N) .to(M) ]]   /// t is an external parame
 t_3 = [[ (x:double) | x = f(t,*,*,*) .to(M) .to(N) .to(O) ]]   /// t is an external parameter such as time...
 
 t_n = [[ (x:double) | x = f(t,...) .to(o) .by(n) ]]   /// t is an external parameter such as time...
+
+
+// specify a matrix as having a particular shape.
+
+[<m,n>[ (x:double) | x = f(t,*,*) .to(N) .to(M) ] ]
+
+// Or you can do this with an array generator.
+
+[<m,n>[ (x:double) | x = f(t,*) .to(N*M)  ]]
+
+[<1,n>[ (x:double) | x = f(t,*) .to(N)  ]]  // A column
+
+[<n,1>[ (x:double) | x = f(t,*) .to(N)  ]]  // A row
+[[ (x:double) | x = f(t,*) .to(N) ]]  // A row
+```
+
+So far, most of the generators shown, make new data by calling a function. 
+So, you would expect that a generator could take an existing container, and 
+move things into another container. So, one way to approach this would be 
+to make a generalization of the range specifier. So far, the range 
+specifier has been [l..u], or lower to upper with some step specified after `^!`.
+
+So, borrowing from Haskell, you might see a form (x:xs), which means the first element followed by
+the rest of the list. We can use that like a range. And, we can add another symbol, `&` to indicate
+that a the program should walk down the list with a reference pointer, as such (x:&xs).
+So, we can think of this as a value with the rest of the list pointed to by xs.
+
+Now, we can write the following kind of generator:
+
+```
+	[ c | .in( c : xs ) ]
+```
+
+Now, we can think of some forms that allow for use of the generated elements. More ways of making arrays,
+and more special keyword uses for looping. .for might have already been mentioned. And, we can add 
+keywords for accumulating sums and multipliers: .SIG, .PI, which look like similar symbols found in mathematics.
+
+Here some examples:
+
+```
+	last_val = .for( [ c | .in ( c : x ) ] ) {
+		f.*(g)(c)
+	}
+	
+	sum = .SIG( [ c | .in ( c : x ) ] ) {
+		f.*(g)(c)
+	}
+	
+	product = .PI( [ c | .in ( c : x ) ] ) {
+		f.*(g)(c)
+	}
+
+// And, here is a new matrix with the list generator being put to use.
+
+	[<m,n>[ c | .in (c:xs) ]]
+
+```
+
+```
 
 // Make a decision tree ...
 // A recursive pattern...
