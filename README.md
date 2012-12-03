@@ -709,25 +709,25 @@ So, we can think of this as a value with the rest of the list pointed to by xs.
 Now, we can write the following kind of generator:
 
 ```
-	[ c | .in( c : xs ) ]
+	[ c | .in( c : &xs ) ]
 ```
 
 Now, we can think of some forms that allow for use of the generated elements. More ways of making arrays,
 and more special keyword uses for looping. .for might have already been mentioned. And, we can add 
 keywords for accumulating sums and multipliers: .SIG, .PI, which look like similar symbols found in mathematics.
 
-Here some examples:
+Here some examples (notice the use of functional composition):
 
 ```
-	last_val = .for( [ c | .in ( c : x ) ] ) {
+	last_val = .for( [ c | .in ( c : &x ) ] ) {
 		f.*(g)(c)
 	}
 	
-	sum = .SIG( [ c | .in ( c : x ) ] ) {
+	sum = .SIG( [ c | .in ( c : &x ) ] ) {
 		f.*(g)(c)
 	}
 	
-	product = .PI( [ c | .in ( c : x ) ] ) {
+	product = .PI( [ c | .in ( c : &x ) ] ) {
 		f.*(g)(c)
 	}
 
