@@ -4,7 +4,7 @@ Acai
 
 				So, here is a computer programming language named after it.
 
-Intro 
+Intro
 =============================================================================================================
 
 
@@ -27,14 +27,14 @@ It now has lambda expressions and some amount of type inference.
 
 Another, is Java. That language now has type schema, similar to C++ templates.
 
-Some languages have been written to be all functional (LISP, Haskell) and others have been written to be all object oriented, 
-(Ruby, SmallTalk). These languages adopt clear choices for policies of expression. They may be too purist. 
-When things start to run many times slower than C or Fortran, with the allowance of interpetation v.s. compilation, 
-the language user begins to question the need for purity. But, you might notice that among the languages just mentioned, 
-some produce very swift programs. Haskell and SmallTalk produce fairly swift programs. There used to be compilers for LISP, 
+Some languages have been written to be all functional (LISP, Haskell) and others have been written to be all object oriented,
+(Ruby, SmallTalk). These languages adopt clear choices for policies of expression. They may be too purist.
+When things start to run many times slower than C or Fortran, with the allowance of interpetation v.s. compilation,
+the language user begins to question the need for purity. But, you might notice that among the languages just mentioned,
+some produce very swift programs. Haskell and SmallTalk produce fairly swift programs. There used to be compilers for LISP,
 and those programs rivaled some of the C programs.
 
-But, time goes by. Some languages are more loved than others. Some start with old machine models and don't grow 
+But, time goes by. Some languages are more loved than others. Some start with old machine models and don't grow
 with the new machines.
 
 LISP is a language that seems to have fallen out of love. But, it is a stretch for most people to read it.
@@ -59,7 +59,7 @@ Or, at least some language owners would go around saying that so as to make thei
 But, these pointerless languages usually try to own all the memory models. Those language are supposed to provide a sub layer of memory management.
 And, memory objects get reference counts, which go up and down with scoping and other indicators of object use.
 For instance when a field of some object is set to NULL, or is reset, or is unset, the referent gets one less reference count.
-Then a garbage collector, which runs when it wants, culls all the objects not referenced. 
+Then a garbage collector, which runs when it wants, culls all the objects not referenced.
 
 Garbage collection options and the option to use reference counted objects is a good strategy for many kinds of programs.
 It is not good for all programs. Some programs work at a low level. Some work at high levels.
@@ -71,7 +71,7 @@ So, you might like to lock a program into memory and let other programs make pag
 
 These programs that are locked into memory might have very customized memory management. And, you would want for
 the program to have full access to pointer arithmetic. So, you would want your language to have pointer access
-and a keen awareness of the type of data in the memory areas. 
+and a keen awareness of the type of data in the memory areas.
 
 It would be nice to have one language make an easy choice between different types of memory use.
 There are all kinds of ways to make these choices at the present time. You can write in more than one language.
@@ -155,7 +155,7 @@ Here are some goals of this languages:
 11. Unit Tests - Compiling the code should allow for partial unit tests to be generated as a biproduct.
 12. Machine awareness - It should make use of optimization libraries transparently as possible.
 13. Memory - try to keep from using too much. Keep it under tight control, make garbage collection options obvious.
-14. Get something working - it should accomplish all of the above at some point in time, but get started. 
+14. Get something working - it should accomplish all of the above at some point in time, but get started.
 
 
 
@@ -327,7 +327,9 @@ We can represent 'this' with a symbol '@'
 
 We might write the following:
 
-`	a_var.if ( @ == 2 ) { @ + 5 }`
+```
+	a_var.if ( @ == 2 ) { @ + 5 }
+```
 
 This is an expression that yields 7.
 
@@ -437,7 +439,7 @@ One can have the following:
 			)
 
 	Double	_my_secret_value
-	
+
 		.however (
 				.set { <exprs> }
 				.get { <exprs> }
@@ -528,7 +530,7 @@ matrix = [ 1, 2, 3; 4, 5, 6; 7, 8, 9]  // borrow from certain numerical language
 Now, let's get as close as we can to set theoretic syntax.
 We describe a set by writing it's description inside braces `{}`
 
-Often the we would write the description by listing a form of elements followed by a Sheff stroke, 
+Often the we would write the description by listing a form of elements followed by a Sheff stroke,
 followed by a set of constraints on the values.
 
 For example, `{ x | limit(x) }`
@@ -543,7 +545,7 @@ The formula might produce duplicates. But, we can agree that if a set syntax is 
 So, `{ x | formula_for_generating(x) }` specifies that when the set is generated, that the duplicates be removed.
 
 It seems like a good idea, to make this an expression of elements being generated. So, we are merely saying that the
-elements are generated with a need to have them be stored somewhere. And, we'll express that later. But, 
+elements are generated with a need to have them be stored somewhere. And, we'll express that later. But,
 here is another form of generation.
 
 As an extension of set generation, we can imagine similar syntax for arrays.
@@ -573,12 +575,12 @@ So, here is a map specification:
 
 So, the examples that follow show some more information about specifying data, and keeping clean separations between parts.
 
-So, here is a special symbol, `|>` . That symbol, `|>` , is meant to keep separate generators for parts of tupples. 
-If no variables are mentioned, but single values are produced by expressions delimited by `|>`, 
+So, here is a special symbol, `|>` . That symbol, `|>` , is meant to keep separate generators for parts of tupples.
+If no variables are mentioned, but single values are produced by expressions delimited by `|>`,
 then they can be assumed to line up with the tupple elements or one `|>` for each `,`.
 
-If an expression between `|>`'s generates a pair or higher order tupple, then the tupple elements will line up with  
-the first position the `|>` begins with. And, the next expression following a `|>` will start start after 
+If an expression between `|>`'s generates a pair or higher order tupple, then the tupple elements will line up with
+the first position the `|>` begins with. And, the next expression following a `|>` will start start after
 the length of the tupple.
 
 So, (x,y,z,t,r,s) | gen(x) `|>` gen(a,b)`|>` gen(z) `|>` gen(t,r,s) yields tupples in the family (x,a,b,z,t,r,s)
@@ -695,10 +697,10 @@ t_n = [[ (x:double) | x = f(t,...) .to(o) .by(n) ]]   /// t is an external param
 [[ (x:double) | x = f(t,*) .to(N) ]]  // A row
 ```
 
-So far, most of the generators shown, make new data by calling a function. 
-So, you would expect that a generator could take an existing container, and 
-move things into another container. So, one way to approach this would be 
-to make a generalization of the range specifier. So far, the range 
+So far, most of the generators shown, make new data by calling a function.
+So, you would expect that a generator could take an existing container, and
+move things into another container. So, one way to approach this would be
+to make a generalization of the range specifier. So far, the range
 specifier has been [l..u], or lower to upper with some step specified after `^!`.
 
 So, borrowing from Haskell, you might see a form (x:xs), which means the first element followed by
@@ -713,7 +715,7 @@ Now, we can write the following kind of generator:
 ```
 
 Now, we can think of some forms that allow for use of the generated elements. More ways of making arrays,
-and more special keyword uses for looping. .for might have already been mentioned. And, we can add 
+and more special keyword uses for looping. .for might have already been mentioned. And, we can add
 keywords for accumulating sums and multipliers: .SIG, .PI, which look like similar symbols found in mathematics.
 
 Here some examples (notice the use of functional composition):
@@ -722,11 +724,11 @@ Here some examples (notice the use of functional composition):
 	last_val = .for( [ c | .in ( c : &x ) ] ) {
 		f.*(g)(c)
 	}
-	
+
 	sum = .SIG( [ c | .in ( c : &x ) ] ) {
 		f.*(g)(c)
 	}
-	
+
 	product = .PI( [ c | .in ( c : &x ) ] ) {
 		f.*(g)(c)
 	}
