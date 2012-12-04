@@ -313,8 +313,9 @@ Doing things with dots
 So, here is one idea having to do with puting a '.' in front of key words.
 
 If I write a variable followed by a key word, I will see something like the following:
-
-`	a_var.if(<expr>) { <exprs> }`
+```
+	a_var.if(<expr>) { <exprs> }
+```
 
 This has a kind of Ruby-esk feel to it. As if any var could be an object.
 
