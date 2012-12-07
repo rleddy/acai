@@ -744,12 +744,12 @@ ff|t = gg|t .*( hh|t )
 ```
 
 We might then be able to identify the transform version of this in the following way:
-
-.|(w){ff|t} == .|(w){gg|t .*( hh|t )} == .|(w){gg|t} * .|(w){hh|t}
-
+```
+.|T|(w){ff|t} == .|T|(w){gg(t) .*( hh(t) )} == .|T|(w){gg(t)} * .|T|(w){hh(t)} 
+```
 So, this is a check on the equality of a transformed series with the multiplication of two series, already transformed before multiplication.
 The transform is in the w domain. In fact these would be arrays of numbers. A default transform might be the Fourier transform implemented by the FFT.
-
+So, this syntax `.|T|` delimits a type of transform. And, its domain of expression is its parameter.
 
 More on this later.
 
@@ -763,13 +763,13 @@ We might then write x = .solve([aA b]), in order to get the solution to aA.*(x) 
 
 Later, more difficult versions of solving can be discussed. But, the matrix solution is the old stand by.
 We should also be able to solve other simple, linear things:
-
+```
 y = .solve( [2*x  -5] ), where we can assume that meant 2*x = 5, solve for ```x``` and return it into y.
-
+```
 How about this?
-
+```
 y = .solve( [ 2*x^2 3*x -5 ] )
-
+```
 
 More on this later.
 
