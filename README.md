@@ -737,15 +737,20 @@ But, now we can call it convolution. If we have these time series ff, gg, hh, we
 ff = gg .* ( hh )
 ```
 
-But, transforms are more apt to exist in particular domains, so we might indicate that with a special syntax.
+But, transforms are more apt to exist in particular domains, so we might indicate that with a special syntax:
 
 ```
 ff|t = gg|t .*( hh|t )
 ```
 
+So, seeing this, we could expect that `ff` makes it's values by paying attention to a parameter, `t`. `t` is often time.
+This then `|t` is an indication of the type of function ff is in its relation to how it may be manipulated through tansformational
+processes.
+
+
 We might then be able to identify the transform version of this in the following way:
 ```
-.|T|(w){ff|t} == .|T|(w){gg(t) .*( hh(t) )} == .|T|(w){gg(t)} * .|T|(w){hh(t)} 
+.|T|(w){ff|t} == .|T|(w){gg|t .*( hh|t )} == .|T|(w){gg|t} * .|T|(w){hh|t} 
 ```
 So, this is a check on the equality of a transformed series with the multiplication of two series, already transformed before multiplication.
 The transform is in the w domain. In fact these would be arrays of numbers. A default transform might be the Fourier transform implemented by the FFT.
