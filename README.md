@@ -822,9 +822,10 @@ And, here is a a list storage of data with possible duplicates: `([ x | formula_
 
 We can extend this kind of syntactic idea to hash tables `{# #}`
 
-And, we can make elements be more than single object, but also pairs, tripples, etc.
-
-	`{{ (x,y) | formula_for_generating(x,y) }}`
+And, we can make elements be more than single objects, but also pairs, tripples, etc.
+```
+	{{ (x,y) | formula_for_generating(x,y) }}
+```
 
 And, we can mangle the syntax for a pair `(x,y)` in order to specify a map: `( x => y )`
 So, here is a map specification:
