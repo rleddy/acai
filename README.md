@@ -353,7 +353,7 @@ We might write the following:
 
 This is an expression that yields 7.
 
-( The * might be taken implicitly: `7 == a_var.if ( == 2 ) { + 5 }` )
+( The `@` might be taken implicitly: `7 == a_var.if ( == 2 ) { + 5 }` )
 
 
 ( What about `a = a_var.?(==2)? b : c  T=> { a = ( a_var == 2 ) ? b : c }` )
@@ -367,7 +367,7 @@ my_array.foreach( @._list_of_things .as q ) {
 }
 ```
 
-( The @ might be taken implicitly:
+( The `@` might be taken implicitly:
 
 ```
 	my_array.foreach( ._list_of_things .as q ) {
@@ -757,6 +757,47 @@ The transform is in the w domain. In fact these would be arrays of numbers. A de
 So, this syntax `.|T|` delimits a type of transform. And, its domain of expression is its parameter.
 
 More on this later.
+
+
+Accessing Array Elements and Parts of Arrays
+--------------------------------------------
+
+Suppose we have an array, `x`.
+
+We might define it in this fairly straight forward way: `x = [1,2,3,4,5,6]`.
+
+Previously, we have suggested this kind of constant addition: `x + 2 == [2,4,6,8,10,12]`.
+
+And, we might have gotten that `x[2] == 6`; we can start indexing at 0.
+We can always set up a way to index an array starting at some other elements `x:1[2] == 4`.
+This 'colon' syntax is a similar to what other languages have inside the brackets `[]` for ranges.
+
+
+What about referencing a part of an array? In C, we write `x + 2`, to mean the array starting two addresses up from `x`.
+But, we already set aside this operation for adding a constant to the array elements.
+But, in C `&x[0]` is the address of the first element of x. That is, `&x[0] == x`.
+But, we can use the `&x` in order to mean C's `&x[0]`. In which case, for the `x` that we already have, we can
+write `&x == [1,2,3,4,5,6]` for a true expression. Then `&x + 3 == [4,5,6]` is also true.
+
+We might have `y = &x + 2` as a way of defining `y = [3,4,5,6]`. But, there would be a sharing of memory between `x` and `y`.
+
+So, we now can prefer a caveat for array assignment. `y = &x` is a reference, `y` now points to what `x` points to.
+But, `y = x` is an implicit copy of `x` into an area refered to by `y`. What about a clone?
+Let's say what we mean, a clone can be extensive if objects are big enough. So, we may wish to know when we are taking that
+risk. So, `y = x` can be a surface copy. But, we can say `y = .clone(x)` for a clone, of course. 
+
+(So, just because some are apt to ask, a clone copies an entire tree or graph of structure top to bottom.)
+
+One last thing for this section, let's shorten things up by allowing `[]` to work on any expression returning parts of arrays as suc:
+`(&x + 3)[2] == 6`.
+
+Of course, `(&x + 3)[2] = 7` makes `x` become `[1,2,3,4,5,7]`.
+
+Later, we may discuss the type of the elements in the arrays. They might be objects stored in flat binary formats, or they might 
+be references to objects, stored somewhere else. In a language such as C, we can be very clear on these choices. In 
+other languages, we not be sure how things are stored in the array, but it will be taken care of; and, hopefully, the syntax
+will provide the right amount of obfuscation and clarification of the issue. Right now, I am guessing there is some 
+happy medium that will become clear with types.
 
 
 Requesting Solutions
