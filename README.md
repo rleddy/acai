@@ -1061,7 +1061,7 @@ So, we might allow that as well:
 		f.*(g)(c)
 	}
 
-	product = .PI(  c : &x  ] ) {
+	product = .PI(  c : &x  ) {
 		f.*(g)(c)
 	}
 ```
