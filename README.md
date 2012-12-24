@@ -1151,8 +1151,35 @@ Wouldn't it be nice to capture the sum and the product at the same time? Why not
 
 ```
 
-We can give that a little more thought later on.
+We can give that a little more thought later on. But, before departing this thought process, we might notice that the `.>>`
+keyword looks liks a C++ stream operator. So, I want to think of it as a sink indicating keyword. But, as it stands
+out syntactically, we might allow it to be a right side sink indicator as such:
 
+```
+	Function compost = f.*(g)(@);
+
+	compost.for.SIG.PI( : &x ) .>> (last_val, sum, product);
+```
+
+So, this can be looked at as syntax choice indicating a default right sink. But, if there is no left side to it, then
+some value genartor is needed on the right side of an `=` sign. So, we might think like this, " what follows an `=` sign - up
+to a key word, is a thing that makes a value, and that value needs to end up somewhere. So, put into a structurally consonant thing like
+a variable or a sink. But, if you have some unattached value generator, let the value go into whatever is begging for a value
+in the current context, such as a sink, perhaps."  So, the follwing might be acceptable as well, providing it is clear that
+nothing is lef to the `=` sign. 
+
+```
+	= compost.for.SIG.PI( : &x ) .>> (last_val, sum, product);
+```
+Where as, the following:
+
+```
+	x = compost.for.SIG.PI( : &x ) .>> (last_val, sum, product);
+```
+
+Can at best sink the `x`. But, the sink is pointing at multiple values. So, does `x` get exploded? Or, do we call 
+this an error? Perhaps the default would be to try to explode the `x` with the side affect of haveing the triple
+stored within the `x` for a later use.
 
 ```
 
