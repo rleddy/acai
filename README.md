@@ -93,7 +93,7 @@ Some of the packages that have to be looked at are the following:
 
 An interesting thing about these packages that they have tradeoffs in what they can optimize.
 So, if you had a very savy language, you might hide which one of these is in use.
-And, CUDA, which some people say is really just for NVIDIA processors, makes us wish that 
+And, CUDA, which some people say is really just for NVIDIA processors, makes us wish that
 the language might have to know if that
 is the context that it is in. Some have tested a pure CUDA implementation to be swifter than an OpenCL implementation.
 But, what if we have a processor that is not CUDA compatible, but is OpneCL compatible?
@@ -381,6 +381,49 @@ my_array.foreach( @._list_of_things .as q ) {
   You can see that the implicit use of @ still has meaning when, ._ indicates the member variable.
 
 )
+
+
+Here is another thing to do with a dot.
+
+
+Often, loops will be done over a function. But, usually, a loop goes over a block of code. When just one function maps over a set of elements, the loop syntax
+starts to appear to be combersome. So, why not have a syntax which supplys a parameter, as would a map?  So, we would have to have some sort of place holder
+for the function parameter being repeatedly replaced. And, the loop would have to generate it.
+
+For instance suppose, we have a two parameter fucntion `f`. Then, f(x,y) would be a call of it.
+
+We might write a loop like this:
+
+```
+	.for ( c : xs ) {
+		f(c,y);
+	}
+```
+
+But, we might write the following: `f(c,y).for( c : xs );`
+
+
+Indeed, we could abbreviate further: `f(@,y).for ( : xs );`.
+
+
+So, this function returns a value, not an object. And `.for` remains a key word (symbol) indicating how values will be introduced to the actual object, which is a function object.
+This is somewhat like a curried function, which is a function object. But, we are not forcing a method status onto the .for.
+
+Now, we can include the key words .SIG for sum of a sequence and .PI for the multiplication of a sequence. And, we pretty much can guess that the type of the value of the
+next two expressions:
+
+```
+
+	f(@,y).SIG ( : xs )
+	f(@,y).PI ( : xs )
+
+
+```
+
+Here, we can gues that `f(x,y)` returns some kind of number, real, complex, integer. 
+
+
+
 
 
 Objects and Properties
@@ -753,7 +796,7 @@ processes.
 
 We might then be able to identify the transform version of this in the following way:
 ```
-.|T|(w){ff|t} == .|T|(w){gg|t .*( hh|t )} == .|T|(w){gg|t} * .|T|(w){hh|t} 
+.|T|(w){ff|t} == .|T|(w){gg|t .*( hh|t )} == .|T|(w){gg|t} * .|T|(w){hh|t}
 ```
 So, this is a check on the equality of a transformed series with the multiplication of two series, already transformed before multiplication.
 The transform is in the w domain. In fact these would be arrays of numbers. A default transform might be the Fourier transform implemented by the FFT.
@@ -787,7 +830,7 @@ We might have `y = &x + 2` as a way of defining `y = [3,4,5,6]`. But, there woul
 So, we now can prefer a caveat for array assignment. `y = &x` is a reference, `y` now points to what `x` points to.
 But, `y = x` is an implicit copy of `x` into an area refered to by `y`. What about a clone?
 Let's say what we mean, a clone can be extensive if objects are big enough. So, we may wish to know when we are taking that
-risk. So, `y = x` can be a surface copy. But, we can say `y = .clone(x)` for a clone, of course. 
+risk. So, `y = x` can be a surface copy. But, we can say `y = .clone(x)` for a clone, of course.
 
 (So, just because some are apt to ask, a clone copies an entire tree or graph of structure top to bottom.)
 
@@ -796,10 +839,10 @@ One last thing for this section, let's shorten things up by allowing `[]` to wor
 
 Of course, `(&x + 3)[2] = 7` makes `x` become `[1,2,3,4,5,7]`.
 
-Later, we may discuss the type of the elements in the arrays. They might be objects stored in flat binary formats, or they might 
-be references to objects, stored somewhere else. In a language such as C, we can be very clear on these choices. In 
+Later, we may discuss the type of the elements in the arrays. They might be objects stored in flat binary formats, or they might
+be references to objects, stored somewhere else. In a language such as C, we can be very clear on these choices. In
 other languages, we not be sure how things are stored in the array, but it will be taken care of; and, hopefully, the syntax
-will provide the right amount of obfuscation and clarification of the issue. Right now, I am guessing there is some 
+will provide the right amount of obfuscation and clarification of the issue. Right now, I am guessing there is some
 happy medium that will become clear with types.
 
 
@@ -1065,6 +1108,50 @@ So, we might allow that as well:
 		f.*(g)(c)
 	}
 ```
+
+
+Don't forget the way a curried function object can introduce the loop:
+
+
+```
+	last_val = f.*(g)(@).for( : &x );
+
+	sum = f.*(g)(@).SIG( : &x );
+
+	product = f.*(g)(@).PI( : &x );
+
+
+```
+
+Now, seeing this, we might want to make a variable hold the function object. So, we might have a little program like the following:
+
+
+```
+
+	Function compost = f.*(g)(@);
+	
+	last_val = compost.for( : &x );
+
+	sum = compost.SIG( : &x );
+
+	product = compost.PI( : &x );
+
+
+```
+
+Wouldn't it be nice to capture the sum and the product at the same time? Why not do the following?
+
+
+```
+
+	Function compost = f.*(g)(@);
+
+	last_val, sum, product = compost.for.SIG.PI( : &x );
+
+
+```
+
+We can give that a little more thought later on.
 
 
 ```
