@@ -1178,7 +1178,7 @@ Where as, the following:
 ```
 
 Can at best sink the `x`. But, the sink is pointing at multiple values. So, does `x` get exploded? Or, do we call 
-this an error? Perhaps the default would be to try to explode the `x` with the side affect of haveing the triple
+this an error? Perhaps the default would be to try to explode the `x` with the side affect of having the triple
 stored within the `x` for a later use.
 
 ```
