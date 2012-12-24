@@ -93,8 +93,11 @@ Some of the packages that have to be looked at are the following:
 
 An interesting thing about these packages that they have tradeoffs in what they can optimize.
 So, if you had a very savy language, you might hide which one of these is in use.
-And, CUDA, which really just for NVIDIA processors, the language might have to know if that
-is the context that it is in. And in general, there might or might not be an FPGA or GPU available for use.
+And, CUDA, which some people say is really just for NVIDIA processors, makes us wish that 
+the language might have to know if that
+is the context that it is in. Some have tested a pure CUDA implementation to be swifter than an OpenCL implementation.
+But, what if we have a processor that is not CUDA compatible, but is OpneCL compatible?
+And in general, there might or might not be an FPGA or GPU available for use.
 
 
 Why Acai?
@@ -169,7 +172,7 @@ So, this is a computer progamming language. That is, it should allow short, simp
 which will eventually be binary instructions in some collection of processor units, CPU, GPU, FGPA, etc.
 
 
-So, let'sb start with key words and variables and type names.
+So, let's start with key words and variables and type names.
 
 Variables
 ----------
@@ -1040,6 +1043,29 @@ Here some examples (notice the use of functional composition):
 	[<m,n>[ c | .in (c:xs) ]]
 
 ```
+
+Short curts for these generators
+---------------------------------
+
+So, some generators have become popular in Java and C++. These are the pattern specification from Haskell, c : rest.
+That's very much like what we just saw for specifying the generator in the .for context. But, it is specialized.
+So, we might allow that as well:
+
+
+```
+	last_val = .for( c : &x ) {
+		f.*(g)(c)
+	}
+
+	sum = .SIG( c : &x ) {
+		f.*(g)(c)
+	}
+
+	product = .PI(  c : &x  ] ) {
+		f.*(g)(c)
+	}
+```
+
 
 ```
 
