@@ -1146,7 +1146,7 @@ Wouldn't it be nice to capture the sum and the product at the same time? Why not
 
 	Function compost = f.*(g)(@);
 
-	last_val, sum, product = compost.for.SIG.PI( : &x );
+	.>>(last_val, sum, product) = compost.for.SIG.PI( : &x );
 
 
 ```
