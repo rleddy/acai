@@ -23,19 +23,23 @@ using namespace std;
 }
 
 
-
-
 %token VAR_BINDER_EXPRESSION
 %token REG_EXPER
 %token VARIABLE
 %token NUMBER
+
 %token STRING_LITERAL
+%token FLOAT_LITERAL
+%token INT_LITERAL
+
 %token FUNCTION_NAME
 %token ARROW_RIGHT
 %token TYPE_NAME
 %token BUILTIN_TYPE
+
 %token CONST
 %token CONST_SYMBOL
+
 %token DOT
 %token KEYWORD
 %token COMPILED_SIGN
@@ -45,8 +49,9 @@ using namespace std;
 %token DIMENSION
 %token REF_SYMBOL
 %token ORDER_SYMBOL
+%token COMPETITION_SPEC
 
-
+%token DEREF
 
 %token UNKNOWN
 %token <i_type> NUMBER
@@ -59,7 +64,7 @@ using namespace std;
 
 
 /*
-  The first part of processing will be to to eliminate comments and normalize spacing.
+	The first part of processing will be to to eliminate comments and normalize spacing.
 	So, comments will not be part of the grammar.
 
 	Assume that all special symbols are known from the lexer.
@@ -285,6 +290,8 @@ var_type_bind_and_filter_list :
 		  | var_type_bind_and_filter var_type_bind_and_filter_list
 ;
 
+
+
 /*
 
 	OTHER TERMINALS
@@ -295,23 +302,27 @@ var_type_bind_and_filter_list :
 
 
 initialization_expression :
-		  "=" common_key_word_expression
-		| "=" evaluation
+		"=" evaluation
 ;
+
 
 
 cartesian_domain :
 		"<" type_name_list ">"
 ;
 
+
+
 return_type :
 	abstract_type_identifier
 ;
 
 
+
 curried_return_type :
 		"C" "<" mixed_types_and_values ">"
 ;
+
 
 
 mixed_types_and_values :
@@ -391,10 +402,9 @@ synonymic_type_definition :
 well_known_type_constructor :
 		  vector_constructor
 		| matrix_constructor
-		| tensor_constructor
-		| string_literal
-		| float_literal
-		| int_literal
+		| STRING_LITERAL
+		| FLOAT_LITERAL
+		| INT_LITERAL
 ;
 
 
@@ -437,7 +447,7 @@ abstract_type_schema :
 
 type_form_identifer :
 	TYPE_NAME
-	| FIELD_TYPE '{' DIMENSION '}'
+	| FIELD_TYPE '{' dimension '}'
 ;
 
 
@@ -534,9 +544,9 @@ data_typification :
 
 
 var_type_bind_and_filter :
-		  VARIABLE ( ':' type_form_identifer )?  ( ':' ordering_predicate )?
+		  VARIABLE ( ':' abstract_type_identifier )?  ( ':' ordering_predicate )?
 		| '*'
-		| type_form_identifer
+		| abstract_type_identifier
 ;
 
 
@@ -585,7 +595,7 @@ restricted_set_selection :
 
 
 set_producer_expression :
-		surface_copy
+		  surface_copy
 		| deep_copy
 ;
 
@@ -597,7 +607,8 @@ deep_copy :
 
 
 surface_copy :
-		'{' TYPE_NAME '}'
+		  '{' TYPE_NAME '}'
+		| '{' VARIABLE '}'
 ;
 
 
@@ -634,14 +645,7 @@ dimension_specifier :
 
 
 map_element :
-		key_expression "=>" evaluation
-;
-
-
-
-key_expression :
-		  VARIABLE
-		| evaluation
+		evaluation "=>" evaluation
 ;
 
 
@@ -676,10 +680,23 @@ dimension :
 evaluation :
 		  NUMBER
 		| STRING_LITERAL
+		| VARIABLE
+		| member_with_accessor
+		| set_producer_expression
 		| functional_evaluation
 		| common_key_word_expression
 ;
 
+
+
+member_with_accessor :
+	VARIABLE ( member_accessor )+
+;
+
+
+member_accessor :
+	DEREF MEMBER_VARIABLE
+;
 
 
 functional_evaluation :
@@ -692,6 +709,7 @@ expression :
 		  evaluation ARITHMETIC_OP evaluation
 		| '(' evaluation ')'
 		| UNARY_OP '(' evaluation ')'
+		| evaluation
 ;
 
 
@@ -700,13 +718,16 @@ type_match_pattern :
 		"</" type_name_list  "/>"
 ;
 
+
 regular_expression :
 		"//" REG_EXPER  "//"
 ;
 
+
 working_memory_pattern :
 		"(/" VAR_BINDER_EXPRESSION "/)"
 ;
+
 
 membership_test :
 		"?/" common_key_word_expression "/?"
@@ -714,6 +735,40 @@ membership_test :
 
 
 
+vector_constructor :
+		"[" vector_components "]"
+;
+
+
+
+matrix_constructor :
+		"[" matrix_components "]"
+;
+
+
+
+matrix_components :
+		vector_components ( ';' vector_components )*
+;
+
+
+
+vector_components :
+		expression ( ',' expression )*
+;
+
+
+
+ref_syntax :
+		  "&"
+		| deref_list
+;
+
+
+deref_list :
+		  "(>)"
+		|   "(>)" deref_list
+;
 
 
 %%
