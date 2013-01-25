@@ -26,6 +26,7 @@ using namespace std;
 %token VAR_BINDER_EXPRESSION
 %token REG_EXPER
 %token VARIABLE
+%token ATOMIC_VARIABLE
 %token NUMBER
 
 %token STRING_LITERAL
@@ -51,16 +52,56 @@ using namespace std;
 %token ORDER_SYMBOL
 %token COMPETITION_SPEC
 
+
+%token OPEN_ABSRTRACT_TYPE_SCHEMA    // "{!"
+%token CLOSE_ABSRTRACT_TYPE_SCHEMA   // "!}"
+
+%token FUNCTION_MAP_INTRODUCER  // "::"
+
+%token EQUALS   // '='
+
+%token RIGHT_ARROW  // '->'
+
+%token HASH_OPEN // '{#'
+
+%token HASH_CLOSE // '#}'
+%token ODERING_PREDICATE_OPEN    //'%-'
+%token ODERING_PREDICATE_CLOSE   //'-%'
+%token GENERATION_SEPERATOR  //'|>'
+%token CARDINALITY_RESTRICTION_SYMBOL //"|\\"
+%token MAP_MEMBER_INTRODUCER //'=>'
+
+
+
+%token DEREF_CONTAINER_SYMBOL  // (>)
+%token OPEN_TYPE_MACHTER       // </
+%token CLOSE_TYPE_MACHTER      // />
+%token OPEN_REGEXP_MATCHER     //  "//"
+%token CLOSE_REGEXP_MATCHER     //  "//"
+
+%token OPEN_WORKING_MEMORY_MATCHER		//  '(/'
+%token CLOSE_WORKING_MEMORY_MATCHER		//  '/)'
+
+%token OPEN_MEMBERSHIP_TEST_MATCHER		//  '?/'
+%token CLOSE_MEMBERSHIP_TEST_MATCHER 	//  '/)'
+%token RANGE_INDICATOR_SYMBOL			//  '..'
+%token STEPPER_INTRODUCER_SYMBOL		// '^!'
+
+%token TYPE_OBJECT_CONTEXT  // == Type_Object
+%token TYPE_PARTIAL_CONTEXT // == Type_Specializer
+%token TYPE_ABSTRACTION_CONTEXT // == Type_Schema
+%token DERIVATION_KEY_WORD // == from
+
+%token TYPE_REPLACEMENT_VARIABLE
+%token MEMBER_VARIABLE
+%token UNARY_OP
+
 %token DEREF
 
-%token UNKNOWN
-%token <i_type> NUMBER
+%token ARITHMETIC_OP
 
+%token NUMBER
 
-%type <i_type> number
-
-
-%start number
 
 
 /*
@@ -68,7 +109,7 @@ using namespace std;
 	So, comments will not be part of the grammar.
 
 	Assume that all special symbols are known from the lexer.
-	
+
 */
 
 
@@ -76,10 +117,14 @@ using namespace std;
 
 
 
-module : ( definitive_elements )+
+module : definitive_elements_list
 ;
 
 
+definitive_elements_list :
+	  definitive_elements
+	| definitive_elements definitive_elements_list
+;
 
 
 
@@ -98,8 +143,10 @@ data sink
 
 */
 common_key_word_expression :
-		keyword_sequence '(' keyword_dependent_parameters ')' ( '{' evaluation_list '}' )?
+		  keyword_sequence '(' keyword_dependent_parameters ')' '{' evaluation_list '}'
+		| keyword_sequence '(' keyword_dependent_parameters ')'
 ;
+
 
 
 /*
@@ -113,10 +160,9 @@ common_key_word_expression :
 
 */
 
-
 type_definitions :
 		  synonymic_type_definition
-		| abstract_type_schema  "{!" definitive_elements "!}"
+		| abstract_type_schema  OPEN_ABSRTRACT_TYPE_SCHEMA definitive_elements CLOSE_ABSRTRACT_TYPE_SCHEMA
 		| partial_abstract_type_instantiation
 		| classic_type_definition
 ;
@@ -130,22 +176,29 @@ type_definitions :
 */
 
 function_mapping_forms :
-		FUNCTION_NAME "::" function_mapping_forms_signature
+		FUNCTION_NAME FUNCTION_MAP_INTRODUCER cartesian_domain ARROW_RIGHT function_mapping_forms_signature
 ;
 
 
 
 function_mapping_forms_signature :
-		  cartesian_domain ARROW_RIGHT return_type
-		| cartesian_domain ARROW_RIGHT curried_return_type ARROW_RIGHT return_type
+		   curried_return_type ARROW_RIGHT abstract_type_identifier
+		|  abstract_type_identifier
 ;
 
 
 
-specialized_form_function_definitions :
-		  static_curried_function_definition
-		| static_functional_composition
+specialized_form_function_definitions : COMPILED_SIGN BUILT_IN_FUNCTION_TYPE FUNCTION_NAME EQUALS FUNCTION_NAME specialized_form_function_def_split
 ;
+
+/*
+    second part is curried function definition
+*/
+specialized_form_function_def_split :
+		  common_key_word_expression
+		| '('  parameter_list  ')'
+;
+
 
 
 
@@ -158,7 +211,7 @@ specialized_form_function_definitions :
 
 variable_definitions :
 	  abstract_type_identifier variable_def_list
-	| VARIABLE "="  well_known_type_constructor
+	| VARIABLE EQUALS  well_known_type_constructor
 ;
 
 
@@ -171,7 +224,7 @@ variable_definitions :
 
 constant_definitions :
 		  one_const_definition
-		| one_const_definition "," constant_definitions
+		| one_const_definition ',' constant_definitions
 ;
 
 
@@ -181,7 +234,7 @@ constant_definitions :
 
 	ATOMICS
 	ABSTRACT TYPE IDENTIFIER - identify an existing type for use in variable and expression classification.
-	
+
 	ONE VARIABLE DEFINITION - follows an abstract type identifier
 	ONE CONST DEFINITION - similar to one variable, but must be a capitalized constant, and the initialization expression is required.
 */
@@ -189,14 +242,17 @@ constant_definitions :
 
 abstract_type_identifier :
 		TYPE_NAME
-	|	type_form_identifer "<" type_name_list ">"
+	|	type_form_identifer '<' type_name_list '>'
 	|	BUILTIN_TYPE
 ;
 
 
 
 one_variable_definition :
-	    (ref_syntax)? VARIABLE ( initialization_expression )?
+		  VARIABLE
+		| VARIABLE initialization_expression
+		| ref_syntax VARIABLE initialization_expression
+		| ref_syntax VARIABLE
 ;
 
 
@@ -228,15 +284,15 @@ keyword_dependent_parameters :
 */
 
 type_name_list :
-	abstract_type_identifier "," type_name_list
+	  abstract_type_identifier
+	| abstract_type_identifier ',' type_name_list
 ;
 
 
 
-
 parameter_list :
-		expression ',' parameter_list
-		expression
+		  expression
+		| parameter_list ',' expression
 ;
 
 
@@ -244,7 +300,7 @@ parameter_list :
 
 variable_def_list :
 		  one_variable_definition
-		| one_variable_definition "," variable_def_list
+		| one_variable_definition ',' variable_def_list
 ;
 
 
@@ -280,8 +336,8 @@ match_expression_list :
 
 
 dimension_list :
-		  dimension
-		| dimension ',' dimension_list
+		  DIMENSION
+		| DIMENSION ',' dimension_list
 ;
 
 
@@ -302,32 +358,27 @@ var_type_bind_and_filter_list :
 
 
 initialization_expression :
-		"=" evaluation
+		EQUALS evaluation
 ;
 
 
 
 cartesian_domain :
-		"<" type_name_list ">"
+		'<' type_name_list '>'
 ;
 
-
-
-return_type :
-	abstract_type_identifier
-;
 
 
 
 curried_return_type :
-		"C" "<" mixed_types_and_values ">"
+		'C' '<' mixed_types_and_values '>'
 ;
 
 
 
 mixed_types_and_values :
-		abstract_type_identifier "," mixed_types_and_values
-	|	expression "," mixed_types_and_values
+		abstract_type_identifier ',' mixed_types_and_values
+	|	expression ',' mixed_types_and_values
 	|	abstract_type_identifier
 	|	expression
 ;
@@ -335,17 +386,17 @@ mixed_types_and_values :
 
 
 type_name_variable_list :
-		abstract_type_identifier "," type_name_variable_list
-	|	type_replacement_variable "," type_name_variable_list
+		abstract_type_identifier ',' type_name_variable_list
+	|	TYPE_REPLACEMENT_VARIABLE ',' type_name_variable_list
 	|	abstract_type_identifier
-	|	type_replacement_variable
+	|	TYPE_REPLACEMENT_VARIABLE
 ;
 
 
 
 type_variable_list :
-		type_replacement_variable "," type_name_variable_list
-	|	type_replacement_variable
+		TYPE_REPLACEMENT_VARIABLE ',' type_name_variable_list
+	|	TYPE_REPLACEMENT_VARIABLE
 ;
 
 
@@ -371,27 +422,9 @@ evaluative_competition :
 
 
 
-/*
-	common_key_word_expression restricted to .*
-*/
-
-static_functional_composition :
-		COMPILED_SIGN BUILT_IN_FUNCTION_TYPE FUNCTION_NAME "=" FUNCTION_NAME common_key_word_expression
-;
-
-
-/*
-	unbound parameters only
-*/
-
-static_curried_function_definition :
-		COMPILED_SIGN BUILT_IN_FUNCTION_TYPE  FUNCTION_NAME "=" FUNCTION_NAME "("  parameter_list  ")"
-;
-
-
 
 synonymic_type_definition :
-		TYPE_SYN_CONTEXT TYPE_NAME "=" abstract_type_identifier
+		TYPE_SYN_CONTEXT TYPE_NAME EQUALS abstract_type_identifier
 ;
 
 
@@ -417,10 +450,15 @@ well_known_type_constructor :
 */
 
 classic_type_definition :
-	TYPE_OBJECT_CONTEXT TYPE_NAME "=" DOT DERIVATION_KEY_WORD ('(' ( type_name_list )? ')' ) '{' definitive_elements '}'
+	TYPE_OBJECT_CONTEXT TYPE_NAME EQUALS DOT DERIVATION_KEY_WORD '(' option_type_name_list ')'  '{' definitive_elements '}'
 ;
 
 
+
+option_type_name_list :
+		type_name_list
+		|   /* empty */
+;
 
 /*
 
@@ -429,7 +467,7 @@ classic_type_definition :
 */
 
 partial_abstract_type_instantiation :
-	TYPE_PARTIAL_CONTEXT TYPE_NAME "=" type_form_identifer "<" type_name_variable_list ">"
+	TYPE_PARTIAL_CONTEXT TYPE_NAME EQUALS type_form_identifer '<' type_name_variable_list '>'
 ;
 
 
@@ -440,14 +478,15 @@ partial_abstract_type_instantiation :
 */
 
 
+
 abstract_type_schema :
-	TYPE_ABSTRACTION_CONTEXT type_form_identifer "<" type_variable_list ">"  "="
+	TYPE_ABSTRACTION_CONTEXT type_form_identifer '<' type_variable_list '>'  EQUALS
 ;
 
 
 type_form_identifer :
 	TYPE_NAME
-	| FIELD_TYPE '{' dimension '}'
+	| FIELD_TYPE '{' evaluation '}'
 ;
 
 
@@ -459,17 +498,15 @@ type_form_identifer :
 
 */
 
-
-
 match_expession :
-	  type_match_pattern "->" repsonse_action
-	| regular_expression "->" repsonse_action
-	| working_memory_pattern "->" repsonse_action
-	| membership_test "->" repsonse_action
+	  type_match_pattern RIGHT_ARROW repsonse_action
+	| regular_expression RIGHT_ARROW repsonse_action
+	| working_memory_pattern RIGHT_ARROW repsonse_action
+	| membership_test RIGHT_ARROW repsonse_action
 ;
 
 
-repsonse_action : "{"  evaluation_list    "}"
+repsonse_action : '{'  evaluation_list    '}'
 ;
 
 
@@ -492,21 +529,28 @@ generator_expression :
 */
 
 
+
 generation_specifier :
-  		  ( dimension_specifier )? '['  data_typification '|' generation_calculation   ']'
+			dimension_specifier '['  data_typification '|' generation_calculation   ']'
+ 		  '['  data_typification '|' generation_calculation   ']'
 		| '{'  data_typification '|' generation_calculation   '}'
 		| '('  data_typification '|' generation_calculation   ')'
-		| "{#" ( hash_mapper_lambda )?  data_typification '|' generation_calculation "#}"
-		| '{'  ( hash_mapper_lambda )?  map_list '}'
-		| "{#" ( hash_mapper_lambda )?  map_list "#}"
+		|  HASH_OPEN hash_mapper_lambda data_typification '|' generation_calculation HASH_CLOSE
+		|  HASH_OPEN data_typification '|' generation_calculation HASH_CLOSE
+		|  HASH_OPEN map_list HASH_CLOSE
+		| '{'  hash_mapper_lambda  map_list '}'
+		| '{'  map_list '}'
 		| restricted_set_selection
 ;
 
 
 
+
 range :
-	  '[' expression ".." expression ']' (stepper)?
-	| '[' expression "," expression ']'(stepper)?
+	   '[' expression RANGE_INDICATOR_SYMBOL expression ']'
+	|  '[' expression RANGE_INDICATOR_SYMBOL expression ']' stepper
+	|  '[' expression ',' expression ']'
+	|  '[' expression ',' expression ']'stepper
 ;
 
 
@@ -514,13 +558,13 @@ range :
 generator_shortcuts :
 		list_match_expression
 	|	value_container common_key_word_expression
-	|	expression
 ;
 
 
 
 list_match_expression :
-		( VARIABLE )? ':' list_rest_pattern
+		    VARIABLE ':' list_rest_pattern
+		| ':' list_rest_pattern
 ;
 
 
@@ -544,14 +588,17 @@ data_typification :
 
 
 var_type_bind_and_filter :
-		  VARIABLE ( ':' abstract_type_identifier )?  ( ':' ordering_predicate )?
-		| '*'
+		'*'
+		|  VARIABLE ':' ordering_predicate
+		|  VARIABLE ':' abstract_type_identifier  ':' ordering_predicate
+		|  VARIABLE ':' abstract_type_identifier
+		|  VARIABLE
 		| abstract_type_identifier
 ;
 
 
 ordering_predicate :
-	"%-" ORDER_SYMBOL "-%"
+	ODERING_PREDICATE_OPEN ORDER_SYMBOL ODERING_PREDICATE_CLOSE
 ;
 
 
@@ -561,35 +608,44 @@ ordering_predicate :
 	special list
 */
 
+
+
 generation_calculation :
-		  generation_part "|>" generation_calculation
+		  generation_part GENERATION_SEPERATOR generation_calculation
 		| generation_part
 ;
 
 
 
 generation_part :
-		  VARIABLE (common_key_word_expression)+
-		| one_variable_definition (one_variable_definition)*
+		  VARIABLE  key_word_generation_def_list
+		| one_variable_definition
+		| one_variable_definition one_var_generation_def_list
 		| set_producer_expression
 ;
 
 
-
-stepper :
-		"^!" numerical_expression
+key_word_generation_def_list :
+			common_key_word_expression
+		| common_key_word_expression key_word_generation_def_list
 ;
 
 
+one_var_generation_def_list :
+		  one_variable_definition
+		| one_variable_definition one_var_generation_def_list
+;
 
-numerical_expression :
-		expression
+/* numerical expression */
+
+stepper :
+		STEPPER_INTRODUCER_SYMBOL expression
 ;
 
 
 
 restricted_set_selection :
-	set_producer_expression "|\\" cardinality_map
+	set_producer_expression CARDINALITY_RESTRICTION_SYMBOL cardinality_map
 ;
 
 
@@ -645,35 +701,36 @@ dimension_specifier :
 
 
 map_element :
-		evaluation "=>" evaluation
+		evaluation MAP_MEMBER_INTRODUCER evaluation
 ;
 
 
+/*
+	says that the parts of the key are enumerated by the left of  "=>"
+	And, the remaining variable is to the right, as the value identified with the key.
+*/
+
 
 mapper_element :
-	key_source_variables "=>" VARIABLE
+	key_source_variables MAP_MEMBER_INTRODUCER VARIABLE
 ;
 
 
 key_source_variables:
-		  VARIABLE
-		| VARIABLE ',' key_source_variables
+		  ATOMIC_VARIABLE
+		| ATOMIC_VARIABLE ',' key_source_variables
 ;
 
 
 
 
 value_container :
-	VARIABLE '='
-	| '@' '='
-	| '='
+	VARIABLE EQUALS
+	| '@' EQUALS
+	| EQUALS
 ;
 
 
-
-dimension :
-	NUMBER | evaluation
-;
 
 
 
@@ -690,12 +747,13 @@ evaluation :
 
 
 member_with_accessor :
-	VARIABLE ( member_accessor )+
+	VARIABLE member_accessor
 ;
 
 
 member_accessor :
 	DEREF MEMBER_VARIABLE
+	| DEREF MEMBER_VARIABLE member_accessor
 ;
 
 
@@ -713,61 +771,63 @@ expression :
 ;
 
 
-
 type_match_pattern :
-		"</" type_name_list  "/>"
+		OPEN_TYPE_MACHTER type_name_list  CLOSE_TYPE_MACHTER
 ;
 
 
 regular_expression :
-		"//" REG_EXPER  "//"
+		OPEN_REGEXP_MATCHER    REG_EXPER    CLOSE_REGEXP_MATCHER
 ;
 
 
 working_memory_pattern :
-		"(/" VAR_BINDER_EXPRESSION "/)"
+		OPEN_WORKING_MEMORY_MATCHER  VAR_BINDER_EXPRESSION  CLOSE_WORKING_MEMORY_MATCHER
 ;
 
 
 membership_test :
-		"?/" common_key_word_expression "/?"
+		OPEN_MEMBERSHIP_TEST_MATCHER common_key_word_expression CLOSE_MEMBERSHIP_TEST_MATCHER
 ;
 
 
 
 vector_constructor :
-		"[" vector_components "]"
+		'[' vector_components ']'
 ;
 
 
 
 matrix_constructor :
-		"[" matrix_components "]"
+		dimension_specifier '[' matrix_components ']'
 ;
 
 
 
 matrix_components :
-		vector_components ( ';' vector_components )*
+		  vector_components
+		| vector_components ';' matrix_components
 ;
 
 
 
 vector_components :
-		expression ( ',' expression )*
+		  expression
+		| expression ',' expression
 ;
 
 
 
 ref_syntax :
-		  "&"
+		  '&'
 		| deref_list
 ;
 
 
+
 deref_list :
-		  "(>)"
-		|   "(>)" deref_list
+		  DEREF_CONTAINER_SYMBOL
+		| DEREF_CONTAINER_SYMBOL deref_list
 ;
 
 
