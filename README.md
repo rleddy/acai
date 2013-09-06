@@ -111,7 +111,7 @@ That is, there is more on the client side than on the server side when compared 
 I figured out that you could componentize certain aspects of the CMS pages.
 And, I found a JavaScript package which got me componentizing fairly quickly, OAT.
 
-So, I figured out that I could have a Rolled OAT Repository. And, my CMS would be a Rolled OUT Construction Kit.
+So, I figured out that I could have a Rolled OAT Repository. And, my CMS would be a Rolled OAT Construction Kit.
 Which, meant my CMS could ROCK and ROAR.
 
 Well, it turns out that OAT is not that popular. Why, I don't know. I suppose that it's because it's not JQuery.
